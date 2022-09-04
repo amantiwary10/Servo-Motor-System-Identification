@@ -1,4 +1,4 @@
-function [pwm_clock, motor_rpm_clock, time_clock] = data_mapping_discrete_clock()
+function [pwm_clock, motor_rpm_clock, time_clock, current_clock, di_dt] = data_mapping_discrete_clock()
 %% Data Pre-Processing
 
 % Collecting RPM readings taken by the app
@@ -7,6 +7,8 @@ function [pwm_clock, motor_rpm_clock, time_clock] = data_mapping_discrete_clock(
 % Collecting the readings taken by the board
 Time_2_clock = readvars('StepsTest_clock_run1_2022-05-17_215353.csv', 'Range', 'A2:A618');
 pwm = readvars('StepsTest_clock_run1_2022-05-17_215353.csv', 'Range', 'E2:E618');
+current_clock = readvars('StepsTest_clock_run1_2022-05-17_215353.csv', 'Range', 'L2:L618');
+di_dt =  rate_of_change(current_clock,Time_2_clock);
 motor_rpm = zeros(size(Time_2_clock));
 
 [len_Time_2, ~] = size(Time_2_clock);
@@ -26,9 +28,9 @@ for i = 1:len_Time_2
 end
 
 %writematrix(motor_rpm, 'RPM_data.csv', 'Range', 'D2:D618')
-pwm_clock = pwm(1+51:51+51);
-motor_rpm_clock = motor_rpm(1+51:51+51);
-time_clock = Time_2_clock(1+51:51+51);
+pwm_clock = pwm;
+motor_rpm_clock = motor_rpm;
+time_clock = Time_2_clock;
 %% Plotting
 figure(1)
 plot(pwm_clock, motor_rpm_clock)
