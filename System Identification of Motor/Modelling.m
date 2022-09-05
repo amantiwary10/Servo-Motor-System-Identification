@@ -19,17 +19,6 @@ data.Ramp.('PW_Keys') = reshape(sort(unique_data(data.Ramp.pulse_width)), [], 1)
 data.clock.('PW_Keys') = reshape(sort(unique_data(data.clock.pulse_width)), [], 1);
 data.anti_clock.('PW_Keys') = reshape(sort(unique_data(data.anti_clock.pulse_width)), [], 1);
 
- %% Taking average of all cycles at that Pulse width
-% % Ramp Data Set
-% data.Ramp.("average_motor_rpm") = data_averaging(data.Ramp, data.Ramp.motor_rpm);
-% data.clock.("average_motor_rpm") = data_averaging(data.clock, data.clock.motor_rpm);
-% data.anti_clock.("average_motor_rpm") = data_averaging(data.anti_clock, data.anti_clock.motor_rpm);
-
-%% fft
-%X_clean = fast_fourier(data.Ramp.average_motor_rpm, 0.0176);
-
-
-
 %% Combining Data set
 Training_set = struct("Anti_clock", [], "Clock", []);
 Training_set.Anti_clock.("Unique_PW_Keys") = [];
