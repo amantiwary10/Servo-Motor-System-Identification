@@ -62,7 +62,7 @@ for i = 1: length(Training_set.Anti_clock.Unique_PW_Keys)
 
 end
 % duty_cycle = Pulse width * Signal Frequency * 100%
-Training_set.Anti_clock.("Voltage") = 5 * 50 * 100 .* Training_set.Anti_clock.Unique_PW_Keys ;
+Training_set.Anti_clock.("PW_adj") = (Training_set.Anti_clock.Unique_PW_Keys - 1463 .* ones(202, 1));
 %% Using the PW_keys to average the RPM
 % Clock
 
@@ -75,21 +75,28 @@ for i = 1: length(Training_set.Clock.Unique_PW_Keys)
 
 end
 % duty_cycle = Pulse width * Signal Frequency * 100%
-Training_set.Clock.("Voltage") = 5 * 50 * 100 .* Training_set.Clock.Unique_PW_Keys ;
+Training_set.Clock.("PW_adj") = (Training_set.Clock.Unique_PW_Keys - 1463 .* ones(202, 1)) ;
 
 %% Plots
-scatter(data.Ramp.pulse_width, data.Ramp.motor_rpm, ones(length(data.Ramp.pulse_width), 1))
+%scatter(data.Ramp.pulse_width, data.Ramp.motor_rpm, ones(length(data.Ramp.pulse_width), 1))
 hold on
 %plot(data.Ramp.PW_Keys, X_clean, "-m")
-scatter(data.clock.pulse_width, data.clock.motor_rpm, ones(length(data.clock.pulse_width), 1), 'k')
-scatter(data.anti_clock.pulse_width, data.anti_clock.motor_rpm, ones(length(data.anti_clock.pulse_width), 1), 'k')
+%scatter(data.clock.pulse_width, data.clock.motor_rpm, ones(length(data.clock.pulse_width), 1), 'k')
+%scatter(data.anti_clock.pulse_width, data.anti_clock.motor_rpm, ones(length(data.anti_clock.pulse_width), 1), 'k')
 plot(Training_set.Anti_clock.Unique_PW_Keys, Training_set.Anti_clock.motor_rpm, "-k")
 plot(Training_set.Clock.Unique_PW_Keys, Training_set.Clock.motor_rpm, "-m")
 xlabel('PWM')
 ylabel('Motor RPM')
 hold off
-%data_Validation = iddata(motor_rpm_f, pwm_f);
-
+%data_Validation = iddata(motor_rpm_f, pwm_f)
+%% 
+figure(1)
+plot(Training_set.Anti_clock.Voltage, Training_set.Anti_clock.motor_rpm)
+hold on
+plot(Training_set.Clock.Voltage, Training_set.Clock.motor_rpm)
+hold off
+xlabel("Voltage")
+ylabel("Motor RPM")
 %% Transfer Function Estimate
 data_anticlock = iddata(Training_set.Anti_clock.motor_rpm, Training_set.Anti_clock.Voltage);
 T_f_anticlock = tfest(data_anticlock, 2, 0);
