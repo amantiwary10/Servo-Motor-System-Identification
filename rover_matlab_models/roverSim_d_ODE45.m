@@ -8,7 +8,7 @@ clear all
 close all
 
 
-%setting up variables (change things here)
+%% setting up variables (change things here)
     delta = 0.01;%0.001; %time step %DONT CHANGE THIS
     T = 10; %CHANGE THIS IF YOU NEED MORE STEPS
     times = 0:delta:T; 
@@ -25,12 +25,12 @@ close all
     %trajectory generator
     ref_handle = @r; 
 
-%setting up actuator state space model
+%% setting up actuator state space model
     f_A = 1; %bandwidth of the actuator in Hz
     A = tf([0 2*pi*f_A],[1 2*pi*f_A]); %actuator filter transfer function
     A_ss = ss(A); %state space model of actuator transfer function
 
-%setting up controller state space model
+%% setting up controller state space model
     Cx = Kp + Ki/s + Kd*s*(1/tau_d)/(s+(1/tau_d)); %C(s) design (TF), x
     Cy = Kp + Ki/s + Kd*s*(1/tau_d)/(s+(1/tau_d)); % " y
     Ct = Kp + Ki/s + Kd*s*(1/tau_d)/(s+(1/tau_d)); % " theta
@@ -43,7 +43,7 @@ close all
     x_Cx = [0; 0]; x_Cy = [0; 0]; x_Ct = [0; 0];
     ctrl(:,100) = [0; 0; 0];
     
-%setting up plant state space model
+%% setting up plant state space model
     %might not need?
     
 %Determine indices for plotting
