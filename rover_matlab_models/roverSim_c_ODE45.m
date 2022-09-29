@@ -13,7 +13,7 @@ clear all, close all, clc
     s = tf('s'); %ignore
     
     %controller tuning:
-    Kp = 25; Ki = 4; Kd = 2.5; tau_d = 1; %bw of differentiator
+    Kp = 1; Ki = 1; Kd = 1; tau_d = 1; %bw of differentiator
     
     %trajectory generator
     ref_handle = @r; %change this to you reference handle
@@ -30,7 +30,7 @@ clear all, close all, clc
 
     Cx_ss = ss(Cx); %C(s) design (State Space), x
     Cy_ss = ss(Cy); % " y
-    Ct_ss = ss(Ct); % " theta
+    Ct_ss = ss(Ct); % " theta               
     
 %creating reference signal
     for k = 1:times(end)/delta

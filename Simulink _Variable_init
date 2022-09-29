@@ -1,0 +1,35 @@
+clear all
+close all
+clc
+
+%% Simulink Variable Initializer Clockwise
+% 
+% pwm =  readvars('/home/aman/ACL/Servo-Motor-System-Identification/Data/Optical Probe/Clock/Testing/StepsTest_2022-09-25_075743.csv', ...
+%     'Range', 'E2:E969');
+% 
+% rpm = readvars('/home/aman/ACL/Servo-Motor-System-Identification/Data/Optical Probe/Clock/Testing/StepsTest_2022-09-25_075743.csv', ...
+%     'Range', 'N2:N969');
+% id = find(pwm > 1450);
+% 
+% for i = id'
+%     rpm(i) = -rpm(i);
+% end
+
+%% Simulink Variable Initializer Anti-Clockwise
+
+pwm =  readvars('/home/aman/ACL/Servo-Motor-System-Identification/Data/Optical Probe/Anti-Clock/Testing/StepsTest_2022-09-26_121304.csv', ...
+    'Range', 'E2:E969');
+
+rpm = -1 * readvars('/home/aman/ACL/Servo-Motor-System-Identification/Data/Optical Probe/Anti-Clock/Testing/StepsTest_2022-09-26_121304.csv', ...
+    'Range', 'N2:N969');
+% id = find(pwm > 1450);
+% 
+% for i = id'
+%     rpm(i) = -rpm(i);
+% end
+%%
+PWM = struct('time', 1:length(pwm), 'signals', []);
+RPM = struct('time', 1:length(pwm), 'signals', []);
+
+PWM.signals.("values") = pwm;
+RPM.signals.("values") = rpm;

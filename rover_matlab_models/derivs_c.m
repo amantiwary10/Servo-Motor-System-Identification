@@ -91,17 +91,31 @@ function f_x = derivs_c(time,state,Cx_ss,Cy_ss,Ct_ss,A_ss,ref_handle)
 
         y_C = [y_Cx y_Cy y_Ct]'; %creating vector
         u_wheels = M*y_C; %convert to angular wheel velocity
-        
+                    
         %CHANGE LATER (PWM conversion and saturation):
         %%%!!!!!!!!!!!!!!FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        PWM_conv = eye(length(u_wheels)); %convert angular velocity to PWM
-        PWM_min = PWM_conv*u_wheels; %convert to actual lower bound
-        PWM_max = PWM_conv*u_wheels; %convert to actual upper bound
+        %PWM_conv = eye(length(u_wheels)); %convert angular velocity to PWM
+        %PWM_min = PWM_conv*u_wheels; %convert to actual lower bound
+        %PWM_max = PWM_conv*u_wheels; %convert to actual upper bound
         %%%^^^^^^^^^^^^^^FIX THIS^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         
         %convert to actuator space (PWM signal inputs)
-        u_A = PWM_conv*u_wheels; %convert to PWM signal
-        u_A_sat = min(PWM_max, max(PWM_min, u_A)); %introduce saturation
+        u_A = ones([length(u_wheels), 1]);
+        u_A_sat = ones([length(u_wheels), 1]);
+        for i = 1:length(u_wheels)
+            if u_wheels(i) <= 0
+                PWM_max = 2000;
+                PWM_min = 1474.89050;
+                u_A(i) = ((log(((56.3790193/(u_wheels(i) + 52.1850213)) - 0.967777697)/0.619365921)/0.0373632001) + 1520.52209); %convert to PWM signal
+                u_A_sat(i) = min(PWM_max, max(PWM_min, u_A(i))); %introduce saturation
+            elseif u_wheels(i) > 0
+                PWM_max = 1403.57366;
+                PWM_min = 1000;
+                u_A(i) = ((log(((47.3155315/(u_wheels(i) + 2.25295536)) - 0.899019840)/0.0193653666)/0.0401891511) + 1230.76300); %convert to PWM signal
+                u_A_sat(i) = min(PWM_max, max(PWM_min, u_A(i))); %introduce saturation
+            end
+        end
+
 
         u_A1 = u_A_sat(1); 
         u_A2 = u_A_sat(2);
